@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Filament\Resources\Pegawais\Schemas;
+
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Schema;
+
+class PegawaiForm
+{
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextInput::make('user_id')
+                    ->required()
+                    ->numeric(),
+                TextInput::make('nim')
+                    ->required(),
+                TextInput::make('nama')
+                    ->required(),
+                Select::make('gender')
+                    ->options(['Laki-laki' => 'Laki laki', 'Perempuan' => 'Perempuan'])
+                    ->required(),
+                Select::make('divisi_id')
+                    ->relationship('divisi', 'nama_divisi')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+                select::make('jabatan_id')
+                    ->relationship('jabatan', 'nama_jabatan')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+
+                Textarea::make('alamat')
+                    ->required()
+                    ->columnSpanFull(),
+                TextInput::make('foto')
+                    ->default(null),
+                FileUpload::make('foto')
+                    ->label('foto pegawai')
+                    ->image()->directory('pegawai')
+                    ->imageEditor()->maxSize(2048)->nullable(),
+            ]);
+    }
+}
